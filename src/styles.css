@@ -14,7 +14,7 @@
  */
 
 @theme inline {
-  --font-display: "Cormorant", "Times New Roman", serif;
+  --font-display: "EB Garamond", "Times New Roman", serif;
   --font-serif: "Spectral", Georgia, serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
   --font-sans: "Spectral", Georgia, serif;
