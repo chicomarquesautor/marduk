@@ -28,3 +28,12 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- Content (blog posts, characters) lives in Lovable Cloud tables `posts` and `characters`; public pages read them through server functions in `src/lib/content.functions.ts` using the publishable client, so SSR works without a session.
+- Only admins (role in `user_roles`, checked by `has_role`) can write content; the first account ever created is auto-assigned admin by a database trigger, so the site owner just signs up first.
+- The `media` storage bucket is private (workspace blocks public buckets); images are served through `/api/public/media/*`, which streams from storage with long cache headers. Store that relative URL in `cover_url` / `image_url`.
+- Author panel lives under `src/routes/_authenticated/painel*`; editors use `id = "novo"` to create a new row.
+- Post/character body text is Markdown rendered with react-markdown inside the `prose-dream` utility.
+- Display font must render Portuguese accents correctly; Cormorant families misplace diacritics in Chromium, so they are not used.
