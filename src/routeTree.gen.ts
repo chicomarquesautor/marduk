@@ -10,42 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as AuthenticatedPainelRouteImport } from './routes/_authenticated/painel'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as PersonagensIndexRouteImport } from './routes/personagens.index'
 import { Route as PersonagensSlugRouteImport } from './routes/personagens.$slug'
-import { Route as AuthenticatedPainelIndexRouteImport } from './routes/_authenticated/painel.index'
-import { Route as AuthenticatedPainelPersonagensIdRouteImport } from './routes/_authenticated/painel.personagens.$id'
-import { Route as AuthenticatedPainelPostsIdRouteImport } from './routes/_authenticated/painel.posts.$id'
-import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media.$'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedPainelRoute = AuthenticatedPainelRouteImport.update({
-  id: '/painel',
-  path: '/painel',
-  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/blog/',
@@ -67,128 +40,50 @@ const PersonagensSlugRoute = PersonagensSlugRouteImport.update({
   path: '/personagens/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPainelIndexRoute =
-  AuthenticatedPainelIndexRouteImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => AuthenticatedPainelRoute,
-  } as any)
-const AuthenticatedPainelPersonagensIdRoute =
-  AuthenticatedPainelPersonagensIdRouteImport.update({
-    id: '/personagens/$id',
-    path: '/personagens/$id',
-    getParentRoute: () => AuthenticatedPainelRoute,
-  } as any)
-const AuthenticatedPainelPostsIdRoute =
-  AuthenticatedPainelPostsIdRouteImport.update({
-    id: '/posts/$id',
-    path: '/posts/$id',
-    getParentRoute: () => AuthenticatedPainelRoute,
-  } as any)
-const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
-  id: '/api/public/media/$',
-  path: '/api/public/media/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/painel': typeof AuthenticatedPainelRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/personagens/$slug': typeof PersonagensSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/personagens/': typeof PersonagensIndexRoute
-  '/painel/': typeof AuthenticatedPainelIndexRoute
-  '/painel/personagens/$id': typeof AuthenticatedPainelPersonagensIdRoute
-  '/painel/posts/$id': typeof AuthenticatedPainelPostsIdRoute
-  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
-  '/reset-password': typeof ResetPasswordRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/personagens/$slug': typeof PersonagensSlugRoute
   '/blog': typeof BlogIndexRoute
   '/personagens': typeof PersonagensIndexRoute
-  '/painel': typeof AuthenticatedPainelIndexRoute
-  '/painel/personagens/$id': typeof AuthenticatedPainelPersonagensIdRoute
-  '/painel/posts/$id': typeof AuthenticatedPainelPostsIdRoute
-  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/painel': typeof AuthenticatedPainelRouteWithChildren
   '/blog/$slug': typeof BlogSlugRoute
   '/personagens/$slug': typeof PersonagensSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/personagens/': typeof PersonagensIndexRoute
-  '/_authenticated/painel/': typeof AuthenticatedPainelIndexRoute
-  '/_authenticated/painel/personagens/$id': typeof AuthenticatedPainelPersonagensIdRoute
-  '/_authenticated/painel/posts/$id': typeof AuthenticatedPainelPostsIdRoute
-  '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/auth'
-    | '/reset-password'
-    | '/painel'
-    | '/blog/$slug'
-    | '/personagens/$slug'
-    | '/blog/'
-    | '/personagens/'
-    | '/painel/'
-    | '/painel/personagens/$id'
-    | '/painel/posts/$id'
-    | '/api/public/media/$'
+    '/' | '/blog/$slug' | '/personagens/$slug' | '/blog/' | '/personagens/'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/auth'
-    | '/reset-password'
-    | '/blog/$slug'
-    | '/personagens/$slug'
-    | '/blog'
-    | '/personagens'
-    | '/painel'
-    | '/painel/personagens/$id'
-    | '/painel/posts/$id'
-    | '/api/public/media/$'
+  to: '/' | '/blog/$slug' | '/personagens/$slug' | '/blog' | '/personagens'
   id:
     | '__root__'
     | '/'
-    | '/_authenticated'
-    | '/auth'
-    | '/reset-password'
-    | '/_authenticated/painel'
     | '/blog/$slug'
     | '/personagens/$slug'
     | '/blog/'
     | '/personagens/'
-    | '/_authenticated/painel/'
-    | '/_authenticated/painel/personagens/$id'
-    | '/_authenticated/painel/posts/$id'
-    | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
   BlogSlugRoute: typeof BlogSlugRoute
   PersonagensSlugRoute: typeof PersonagensSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   PersonagensIndexRoute: typeof PersonagensIndexRoute
-  ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -199,34 +94,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authenticated/painel': {
-      id: '/_authenticated/painel'
-      path: '/painel'
-      fullPath: '/painel'
-      preLoaderRoute: typeof AuthenticatedPainelRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/blog/': {
       id: '/blog/'
@@ -256,73 +123,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PersonagensSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/painel/': {
-      id: '/_authenticated/painel/'
-      path: '/'
-      fullPath: '/painel/'
-      preLoaderRoute: typeof AuthenticatedPainelIndexRouteImport
-      parentRoute: typeof AuthenticatedPainelRoute
-    }
-    '/_authenticated/painel/personagens/$id': {
-      id: '/_authenticated/painel/personagens/$id'
-      path: '/personagens/$id'
-      fullPath: '/painel/personagens/$id'
-      preLoaderRoute: typeof AuthenticatedPainelPersonagensIdRouteImport
-      parentRoute: typeof AuthenticatedPainelRoute
-    }
-    '/_authenticated/painel/posts/$id': {
-      id: '/_authenticated/painel/posts/$id'
-      path: '/posts/$id'
-      fullPath: '/painel/posts/$id'
-      preLoaderRoute: typeof AuthenticatedPainelPostsIdRouteImport
-      parentRoute: typeof AuthenticatedPainelRoute
-    }
-    '/api/public/media/$': {
-      id: '/api/public/media/$'
-      path: '/api/public/media/$'
-      fullPath: '/api/public/media/$'
-      preLoaderRoute: typeof ApiPublicMediaSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
-interface AuthenticatedPainelRouteChildren {
-  AuthenticatedPainelIndexRoute: typeof AuthenticatedPainelIndexRoute
-  AuthenticatedPainelPersonagensIdRoute: typeof AuthenticatedPainelPersonagensIdRoute
-  AuthenticatedPainelPostsIdRoute: typeof AuthenticatedPainelPostsIdRoute
-}
-
-const AuthenticatedPainelRouteChildren: AuthenticatedPainelRouteChildren = {
-  AuthenticatedPainelIndexRoute: AuthenticatedPainelIndexRoute,
-  AuthenticatedPainelPersonagensIdRoute: AuthenticatedPainelPersonagensIdRoute,
-  AuthenticatedPainelPostsIdRoute: AuthenticatedPainelPostsIdRoute,
-}
-
-const AuthenticatedPainelRouteWithChildren =
-  AuthenticatedPainelRoute._addFileChildren(AuthenticatedPainelRouteChildren)
-
-interface AuthenticatedRouteRouteChildren {
-  AuthenticatedPainelRoute: typeof AuthenticatedPainelRouteWithChildren
-}
-
-const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedPainelRoute: AuthenticatedPainelRouteWithChildren,
-}
-
-const AuthenticatedRouteRouteWithChildren =
-  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
   BlogSlugRoute: BlogSlugRoute,
   PersonagensSlugRoute: PersonagensSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   PersonagensIndexRoute: PersonagensIndexRoute,
-  ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
