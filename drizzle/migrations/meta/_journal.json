@@ -15,6 +15,13 @@
       "when": 1795188352331,
       "tag": "0001_character_portraits",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795321030814,
+      "tag": "0002_restrict_media_bucket_reads",
+      "breakpoints": true
     }
   ]
 }
