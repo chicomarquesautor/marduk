@@ -1,17 +1,16 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Fog } from "@/components/site/fog";
 import { Markdown } from "@/components/site/markdown";
-import { characterQuery, charactersQuery } from "@/lib/content.queries";
+import { getCharacter, getCharacters } from "@/lib/content";
 
 export const Route = createFileRoute("/personagens/$slug")({
-  loader: async ({ context, params }) => {
-    const [character] = await Promise.all([
-      context.queryClient.ensureQueryData(characterQuery(params.slug)),
-      context.queryClient.ensureQueryData(charactersQuery()),
-    ]);
+  loader: ({ params }) => {
+    const character = getCharacter(params.slug);
     if (!character) throw notFound();
-    return { name: character.name, summary: character.summary, role: character.role };
+    const others = getCharacters()
+      .filter((c) => c.slug !== character.slug)
+      .map((c) => ({ slug: c.slug, name: c.name }));
+    return { character, others };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
@@ -19,13 +18,14 @@ export const Route = createFileRoute("/personagens/$slug")({
         meta: [{ title: "Personagem indisponível — Marduk" }, { name: "robots", content: "noindex" }],
       };
     }
-    const title = `${loaderData.name}${loaderData.role ? ` (${loaderData.role})` : ""} — Marduk`;
+    const { character } = loaderData;
+    const title = `${character.name}${character.role ? ` (${character.role})` : ""} — Marduk`;
     return {
       meta: [
         { title },
-        { name: "description", content: loaderData.summary },
+        { name: "description", content: character.summary },
         { property: "og:title", content: title },
-        { property: "og:description", content: loaderData.summary },
+        { property: "og:description", content: character.summary },
         { property: "og:type", content: "profile" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -44,11 +44,7 @@ export const Route = createFileRoute("/personagens/$slug")({
 });
 
 function CharacterPage() {
-  const { slug } = Route.useParams();
-  const { data: character } = useSuspenseQuery(characterQuery(slug));
-  const { data: all } = useSuspenseQuery(charactersQuery());
-  if (!character) return null;
-  const others = all.filter((c) => c.slug !== slug);
+  const { character, others } = Route.useLoaderData();
 
   return (
     <article>
@@ -56,10 +52,10 @@ function CharacterPage() {
         <Fog />
         <div className="relative mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-[5fr_7fr] md:gap-16">
           <div className="relative md:sticky md:top-28 md:self-start">
-            {character.image_url ? (
+            {character.image ? (
               <div className="relative aspect-[3/4] overflow-hidden bg-card">
                 <img
-                  src={character.image_url}
+                  src={character.image}
                   alt={character.name}
                   className="animate-emerge h-full w-full object-cover"
                 />
@@ -79,7 +75,7 @@ function CharacterPage() {
             <h1 className="animate-surface mt-4 font-display text-6xl font-light leading-none text-foreground sm:text-7xl">
               {character.name}
             </h1>
-            {character.quote && character.quote !== "—" && (
+            {character.quote && (
               <blockquote className="animate-surface mt-10 border-l border-ember pl-6 font-display text-3xl italic leading-snug text-fog [animation-delay:500ms]">
                 “{character.quote}”
               </blockquote>
@@ -100,7 +96,7 @@ function CharacterPage() {
           <div className="flex flex-wrap gap-x-10 gap-y-4">
             {others.map((c) => (
               <Link
-                key={c.id}
+                key={c.slug}
                 to="/personagens/$slug"
                 params={{ slug: c.slug }}
                 className="font-display text-3xl text-muted-foreground transition-all duration-700 hover:text-foreground hover:text-glow"

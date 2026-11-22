@@ -1,11 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useAuth } from "@/lib/auth-context";
 
 const navLink =
   "font-mono text-[0.7rem] uppercase tracking-[0.3em] text-muted-foreground transition-colors duration-500 hover:text-foreground";
 
 export function SiteHeader() {
-  const { session } = useAuth();
   return (
     <header className="fixed inset-x-0 top-0 z-50 bg-gradient-to-b from-background via-background/70 to-transparent">
       <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
@@ -22,11 +20,6 @@ export function SiteHeader() {
           <Link to="/blog" className={navLink} activeProps={{ className: "text-foreground" }}>
             Blog
           </Link>
-          {session && (
-            <Link to="/painel" className={navLink} activeProps={{ className: "text-foreground" }}>
-              Painel
-            </Link>
-          )}
         </nav>
       </div>
     </header>

@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Fog } from "@/components/site/fog";
 import { PostRow } from "@/components/site/post-card";
-import { postsQuery } from "@/lib/content.queries";
+import { getPosts } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/blog/")({
@@ -23,12 +22,12 @@ export const Route = createFileRoute("/blog/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery()),
+  loader: () => getPosts(),
   component: BlogIndex,
 });
 
 function BlogIndex() {
-  const { data: posts } = useSuspenseQuery(postsQuery());
+  const posts = Route.useLoaderData();
   const categories = Array.from(new Set(posts.map((p) => p.category)));
   const [active, setActive] = useState<string | null>(null);
   const visible = active ? posts.filter((p) => p.category === active) : posts;
@@ -75,7 +74,7 @@ function BlogIndex() {
           </p>
         ) : (
           visible.map((post) => (
-            <PostRow key={post.id} post={post} entry={posts.length - posts.indexOf(post)} />
+            <PostRow key={post.slug} post={post} entry={posts.length - posts.indexOf(post)} />
           ))
         )}
       </section>

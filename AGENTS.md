@@ -31,9 +31,10 @@ use the editor.
 
 ## Project rules
 
-- Content (blog posts, characters) lives in Lovable Cloud tables `posts` and `characters`; public pages read them through server functions in `src/lib/content.functions.ts` using the publishable client, so SSR works without a session.
-- Only admins (role in `user_roles`, checked by `has_role`) can write content; the first account ever created is auto-assigned admin by a database trigger, so the site owner just signs up first.
-- The `media` storage bucket is private (workspace blocks public buckets); images are served through `/api/public/media/*`, which streams from storage with long cache headers. Store that relative URL in `cover_url` / `image_url`.
-- Author panel lives under `src/routes/_authenticated/painel*`; editors use `id = "novo"` to create a new row.
+- The site is fully static: blog posts and characters are Markdown files with front matter in `/content/blog` and `/content/personagens`, edited by the author in an IDE; `src/lib/content.ts` bundles them via `import.meta.glob`, so there is no login, admin panel, or database read.
+- Front matter keys are Portuguese (titulo, data, categoria, resumo, capa, rascunho / nome, papel, ordem, imagem, citacao) because the author writes them by hand; `content/README.md` documents the format and must change with it.
+- Every non-draft content file is prerendered: `vite.config.ts` lists pages by reading `/content`, so new files need no code change.
+- Images live in `public/images/` and are referenced by absolute path (`/images/...`).
+- The old Lovable Cloud tables (`posts`, `characters`, `user_roles`) and `media` bucket are unused leftovers; do not read from them.
 - Post/character body text is Markdown rendered with react-markdown inside the `prose-dream` utility.
 - Display font must render Portuguese accents correctly; Cormorant families misplace diacritics in Chromium, so they are not used.

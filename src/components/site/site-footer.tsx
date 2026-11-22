@@ -14,9 +14,6 @@ export function SiteFooter() {
           <Link to="/blog" className="eyebrow transition-colors hover:text-foreground">
             Blog
           </Link>
-          <Link to="/painel" className="eyebrow opacity-50 transition-opacity hover:opacity-100">
-            Área do autor
-          </Link>
         </div>
         <p className="mt-4 font-mono text-[0.65rem] tracking-[0.3em] text-muted-foreground/50">
           03:17 — © {new Date().getFullYear()}

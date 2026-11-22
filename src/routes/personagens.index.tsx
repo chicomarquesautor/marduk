@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Fog } from "@/components/site/fog";
 import { CharacterCard } from "@/components/site/character-card";
-import { charactersQuery } from "@/lib/content.queries";
+import { getCharacters } from "@/lib/content";
 
 export const Route = createFileRoute("/personagens/")({
   head: () => ({
@@ -18,12 +17,12 @@ export const Route = createFileRoute("/personagens/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(charactersQuery()),
+  loader: () => getCharacters(),
   component: CharactersPage,
 });
 
 function CharactersPage() {
-  const { data: characters } = useSuspenseQuery(charactersQuery());
+  const characters = Route.useLoaderData();
   return (
     <>
       <section className="relative overflow-hidden pb-16 pt-40">
@@ -45,7 +44,7 @@ function CharactersPage() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {characters.map((c, i) => (
               <div
-                key={c.id}
+                key={c.slug}
                 className="animate-surface"
                 style={{ animationDelay: `${300 + i * 150}ms` }}
               >

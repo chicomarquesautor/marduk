@@ -12,10 +12,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AuthProvider } from "@/lib/auth-context";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -132,7 +130,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
         <div aria-hidden className="grain" />
         <div aria-hidden className="vignette" />
         <SiteHeader />
@@ -141,8 +138,6 @@ function RootComponent() {
           <Outlet />
         </main>
         <SiteFooter />
-        <Toaster theme="dark" position="bottom-center" />
-      </AuthProvider>
     </QueryClientProvider>
   );
 }

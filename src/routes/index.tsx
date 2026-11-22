@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Fog } from "@/components/site/fog";
 import { PostRow } from "@/components/site/post-card";
 import { CharacterCard } from "@/components/site/character-card";
-import { charactersQuery, postsQuery } from "@/lib/content.queries";
+import { getCharacters, getPosts } from "@/lib/content";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,17 +23,12 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) =>
-    Promise.all([
-      context.queryClient.ensureQueryData(postsQuery()),
-      context.queryClient.ensureQueryData(charactersQuery()),
-    ]),
+  loader: () => ({ posts: getPosts(), characters: getCharacters() }),
   component: Home,
 });
 
 function Home() {
-  const { data: posts } = useSuspenseQuery(postsQuery());
-  const { data: characters } = useSuspenseQuery(charactersQuery());
+  const { posts, characters } = Route.useLoaderData();
   const latest = posts.slice(0, 3);
 
   return (
@@ -110,7 +104,7 @@ function Home() {
           </div>
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {characters.slice(0, 4).map((c) => (
-              <CharacterCard key={c.id} character={c} />
+              <CharacterCard key={c.slug} character={c} />
             ))}
           </div>
         </section>
@@ -134,7 +128,7 @@ function Home() {
             Nenhuma anotação publicada ainda.
           </p>
         ) : (
-          latest.map((post, i) => <PostRow key={post.id} post={post} entry={posts.length - i} />)
+          latest.map((post, i) => <PostRow key={post.slug} post={post} entry={posts.length - i} />)
         )}
       </section>
     </>

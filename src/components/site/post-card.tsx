@@ -6,7 +6,7 @@ type PostSummary = {
   title: string;
   excerpt: string;
   category: string;
-  published_at: string;
+  date: string;
 };
 
 export function PostRow({ post, entry }: { post: PostSummary; entry: number }) {
@@ -21,7 +21,7 @@ export function PostRow({ post, entry }: { post: PostSummary; entry: number }) {
           Nº {String(entry).padStart(2, "0")}
         </span>
         <span className="font-mono text-xs tracking-[0.2em] text-muted-foreground/70">
-          {formatShortDate(post.published_at)}
+          {formatShortDate(post.date)}
         </span>
       </div>
       <div>

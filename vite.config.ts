@@ -7,12 +7,33 @@
 // the build fails. Never add compression (compressPublicAssets, vite-plugin-compression):
 // hosting already compresses at the edge.
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
+import { readdirSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+
+// Every published Markdown file in /content becomes a prerendered static page.
+function contentSlugs(dir: string) {
+  const folder = fileURLToPath(new URL(`./content/${dir}/`, import.meta.url));
+  return readdirSync(folder)
+    .filter((file) => file.endsWith(".md"))
+    .filter((file) => !/^rascunho:\s*(true|sim)\s*$/m.test(readFileSync(folder + file, "utf8")))
+    .map((file) => file.replace(/\.md$/, ""));
+}
+
+const pages = [
+  { path: "/" },
+  { path: "/blog" },
+  { path: "/personagens" },
+  ...contentSlugs("blog").map((slug) => ({ path: `/blog/${slug}` })),
+  ...contentSlugs("personagens").map((slug) => ({ path: `/personagens/${slug}` })),
+];
 
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    pages,
+    prerender: { enabled: true, autoStaticPathsDiscovery: false },
   },
 });

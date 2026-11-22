@@ -1,30 +1,35 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { Fog } from "@/components/site/fog";
 import { Markdown } from "@/components/site/markdown";
 import { formatDate } from "@/lib/format";
-import { postQuery, postsQuery } from "@/lib/content.queries";
+import { getPost, getPosts } from "@/lib/content";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: async ({ context, params }) => {
-    const [post] = await Promise.all([
-      context.queryClient.ensureQueryData(postQuery(params.slug)),
-      context.queryClient.ensureQueryData(postsQuery()),
-    ]);
+  loader: ({ params }) => {
+    const post = getPost(params.slug);
     if (!post) throw notFound();
-    return { title: post.title, excerpt: post.excerpt };
+    const posts = getPosts();
+    const index = posts.findIndex((p) => p.slug === post.slug);
+    const newer = index > 0 ? posts[index - 1] : undefined;
+    const older = posts[index + 1];
+    return {
+      post,
+      newer: newer ? { slug: newer.slug, title: newer.title } : null,
+      older: older ? { slug: older.slug, title: older.title } : null,
+    };
   },
   head: ({ loaderData }) => {
     if (!loaderData) {
       return { meta: [{ title: "Post indisponível — Marduk" }, { name: "robots", content: "noindex" }] };
     }
-    const title = `${loaderData.title} — Marduk: Diário dos sonhos`;
+    const { post } = loaderData;
+    const title = `${post.title} — Marduk: Diário dos sonhos`;
     return {
       meta: [
         { title },
-        { name: "description", content: loaderData.excerpt },
-        { property: "og:title", content: loaderData.title },
-        { property: "og:description", content: loaderData.excerpt },
+        { name: "description", content: post.excerpt },
+        { property: "og:title", content: post.title },
+        { property: "og:description", content: post.excerpt },
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
@@ -43,14 +48,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function PostPage() {
-  const { slug } = Route.useParams();
-  const { data: post } = useSuspenseQuery(postQuery(slug));
-  const { data: posts } = useSuspenseQuery(postsQuery());
-  if (!post) return null;
-
-  const index = posts.findIndex((p) => p.slug === slug);
-  const newer = index > 0 ? posts[index - 1] : undefined;
-  const older = index >= 0 ? posts[index + 1] : undefined;
+  const { post, newer, older } = Route.useLoaderData();
 
   return (
     <article>
@@ -65,15 +63,15 @@ function PostPage() {
             {post.title}
           </h1>
           <p className="mt-6 font-mono text-xs tracking-[0.25em] text-muted-foreground">
-            {formatDate(post.published_at)}
+            {formatDate(post.date)}
           </p>
         </div>
       </header>
 
-      {post.cover_url && (
+      {post.cover && (
         <div className="mx-auto max-w-5xl px-6">
           <img
-            src={post.cover_url}
+            src={post.cover}
             alt=""
             className="aspect-[16/9] w-full object-cover opacity-90 grayscale-[40%]"
           />
