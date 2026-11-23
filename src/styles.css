@@ -153,16 +153,6 @@
   0% { opacity: 0; filter: blur(8px); transform: translateY(12px); }
   100% { opacity: 1; filter: blur(0); transform: translateY(0); }
 }
-@keyframes breathe {
-  0%, 100% { opacity: 1; text-shadow: var(--text-glow); }
-  50% { opacity: 0.72; text-shadow: none; }
-}
-@keyframes flicker {
-  0%, 92%, 100% { opacity: 1; }
-  93% { opacity: 0.3; }
-  94% { opacity: 1; }
-  96% { opacity: 0.5; }
-}
 
 @utility fog-layer {
   position: absolute;
@@ -221,12 +211,6 @@
 }
 @utility animate-surface {
   animation: surface 1.4s cubic-bezier(0.2, 0.6, 0.2, 1) both;
-}
-@utility animate-breathe {
-  animation: breathe 6s ease-in-out infinite;
-}
-@utility animate-flicker {
-  animation: flicker 7s linear infinite;
 }
 /* Text that fades away at its edge, as if dissolving */
 @utility text-dissolve {
@@ -290,6 +274,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fog-layer, .fog-layer-alt, .animate-breathe, .animate-flicker { animation: none; }
+  .fog-layer, .fog-layer-alt { animation: none; }
   .animate-emerge, .animate-surface { animation-duration: 0.01s; }
 }

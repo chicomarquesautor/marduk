@@ -48,7 +48,7 @@ function Home() {
             Um romance de terror psicológico
           </p>
           <h1 className="animate-emerge mt-6 font-display text-[3.6rem] font-light tracking-[0.1em] text-foreground sm:text-9xl sm:tracking-[0.18em] md:text-[10rem]">
-            <span className="animate-breathe inline-block">MARDUK</span>
+            <span className="text-glow inline-block">MARDUK</span>
           </h1>
           <p className="animate-surface mt-2 font-display text-3xl font-light italic text-fog [animation-delay:900ms] sm:text-4xl">
             Diário dos sonhos
