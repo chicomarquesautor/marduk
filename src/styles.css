@@ -135,16 +135,6 @@
 
 /* ---------- Dream effects ---------- */
 
-@keyframes fog-drift {
-  0% { transform: translate3d(-8%, 0, 0) scale(1.1); }
-  50% { transform: translate3d(6%, -3%, 0) scale(1.2); }
-  100% { transform: translate3d(-8%, 0, 0) scale(1.1); }
-}
-@keyframes fog-drift-reverse {
-  0% { transform: translate3d(6%, 2%, 0) scale(1.15); }
-  50% { transform: translate3d(-6%, -2%, 0) scale(1.05); }
-  100% { transform: translate3d(6%, 2%, 0) scale(1.15); }
-}
 @keyframes emerge {
   0% { opacity: 0; filter: blur(14px); letter-spacing: 0.5em; }
   100% { opacity: 1; filter: blur(0); }
@@ -163,7 +153,6 @@
     radial-gradient(35% 30% at 75% 40%, oklch(0.78 0.02 240 / 8%), transparent 70%),
     radial-gradient(50% 40% at 50% 90%, oklch(0.78 0.02 240 / 9%), transparent 70%);
   filter: blur(30px);
-  animation: fog-drift 38s ease-in-out infinite;
 }
 @utility fog-layer-alt {
   position: absolute;
@@ -173,7 +162,6 @@
     radial-gradient(30% 25% at 60% 70%, oklch(0.78 0.02 240 / 9%), transparent 70%),
     radial-gradient(45% 30% at 30% 30%, oklch(0.78 0.02 240 / 6%), transparent 70%);
   filter: blur(40px);
-  animation: fog-drift-reverse 52s ease-in-out infinite;
 }
 @utility grain {
   position: fixed;
@@ -274,6 +262,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fog-layer, .fog-layer-alt { animation: none; }
   .animate-emerge, .animate-surface { animation-duration: 0.01s; }
 }
