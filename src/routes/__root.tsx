@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&family=Spectral:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap",
       },
       {
         rel: "stylesheet",
@@ -130,8 +130,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-        <div aria-hidden className="grain" />
-        <div aria-hidden className="vignette" />
         <SiteHeader />
         <main className="min-h-screen">
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}

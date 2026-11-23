@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Fog } from "@/components/site/fog";
 import { CharacterCard } from "@/components/site/character-card";
 import { getCharacters } from "@/lib/content";
 
@@ -24,39 +23,25 @@ export const Route = createFileRoute("/personagens/")({
 function CharactersPage() {
   const characters = Route.useLoaderData();
   return (
-    <>
-      <section className="relative overflow-hidden pb-16 pt-40">
-        <Fog />
-        <div className="relative mx-auto max-w-6xl px-6">
-          <p className="eyebrow animate-surface">Quem habita a história</p>
-          <h1 className="animate-emerge mt-6 font-display text-6xl font-light text-foreground sm:text-7xl">
-            Personagens
-          </h1>
-          <p className="animate-surface mt-6 max-w-xl text-lg text-muted-foreground [animation-delay:600ms]">
-            Nenhum deles está mentindo. Pelo menos, não de propósito.
-          </p>
+    <div className="mx-auto max-w-3xl px-6 pb-24 pt-16">
+      <h1 className="font-display text-5xl text-foreground">Personagens</h1>
+      <p className="mt-4 text-lg text-muted-foreground">
+        Nenhum deles está mentindo. Pelo menos, não de propósito.
+      </p>
+      {characters.length === 0 ? (
+        <p className="mt-10 text-muted-foreground">Nenhum personagem publicado ainda.</p>
+      ) : (
+        <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3">
+          {characters.map((c) => (
+            <div key={c.slug}>
+              <CharacterCard character={c} />
+              {c.summary && (
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{c.summary}</p>
+              )}
+            </div>
+          ))}
         </div>
-      </section>
-      <section className="mx-auto max-w-6xl px-6 pb-32">
-        {characters.length === 0 ? (
-          <p className="text-muted-foreground">Os personagens ainda estão na névoa.</p>
-        ) : (
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {characters.map((c, i) => (
-              <div
-                key={c.slug}
-                className="animate-surface"
-                style={{ animationDelay: `${300 + i * 150}ms` }}
-              >
-                <CharacterCard character={c} />
-                {c.summary && (
-                  <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{c.summary}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-    </>
+      )}
+    </div>
   );
 }

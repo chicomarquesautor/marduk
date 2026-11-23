@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Fog } from "@/components/site/fog";
 import { PostRow } from "@/components/site/post-card";
 import { getPosts } from "@/lib/content";
 import { cn } from "@/lib/utils";
@@ -33,51 +32,41 @@ function BlogIndex() {
   const visible = active ? posts.filter((p) => p.category === active) : posts;
 
   return (
-    <>
-      <section className="relative overflow-hidden pb-16 pt-40">
-        <Fog />
-        <div className="relative mx-auto max-w-4xl px-6">
-          <p className="eyebrow animate-surface">Diário de escrita</p>
-          <h1 className="animate-emerge mt-6 font-display text-6xl font-light text-foreground sm:text-7xl">
-            Blog
-          </h1>
-          <p className="animate-surface mt-6 max-w-xl text-lg text-muted-foreground [animation-delay:600ms]">
-            Anotações sobre o processo criativo, decisões difíceis e o andamento do livro — escritas
-            de madrugada, quase sempre.
-          </p>
-        </div>
-      </section>
+    <div className="mx-auto max-w-3xl px-6 pb-24 pt-16">
+      <h1 className="font-display text-5xl text-foreground">Blog</h1>
+      <p className="mt-4 text-lg text-muted-foreground">
+        Anotações sobre o processo criativo, decisões e o andamento do livro.
+      </p>
 
-      <section className="mx-auto max-w-4xl px-6 pb-32">
-        {categories.length > 1 && (
-          <div className="mb-6 flex flex-wrap gap-6">
-            {[null, ...categories].map((cat) => (
-              <button
-                key={cat ?? "all"}
-                type="button"
-                onClick={() => setActive(cat)}
-                className={cn(
-                  "eyebrow border-b pb-1 transition-colors duration-500",
-                  active === cat
-                    ? "border-foreground/60 text-foreground"
-                    : "border-transparent hover:text-foreground",
-                )}
-              >
-                {cat ?? "Tudo"}
-              </button>
-            ))}
-          </div>
-        )}
+      {categories.length > 1 && (
+        <div className="mt-10 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          {[null, ...categories].map((cat) => (
+            <button
+              key={cat ?? "all"}
+              type="button"
+              onClick={() => setActive(cat)}
+              className={cn(
+                "underline-offset-4 transition-colors",
+                active === cat
+                  ? "text-foreground underline"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {cat ?? "Tudo"}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-6">
         {visible.length === 0 ? (
-          <p className="border-t border-border/70 py-10 text-muted-foreground">
+          <p className="border-t border-border py-8 text-muted-foreground">
             Nenhuma anotação por aqui ainda.
           </p>
         ) : (
-          visible.map((post) => (
-            <PostRow key={post.slug} post={post} entry={posts.length - posts.indexOf(post)} />
-          ))
+          visible.map((post) => <PostRow key={post.slug} post={post} />)
         )}
-      </section>
-    </>
+      </div>
+    </div>
   );
 }

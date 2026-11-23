@@ -1,5 +1,4 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Fog } from "@/components/site/fog";
 import { Markdown } from "@/components/site/markdown";
 import { formatDate } from "@/lib/format";
 import { getPost, getPosts } from "@/lib/content";
@@ -37,10 +36,9 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   component: PostPage,
   notFoundComponent: () => (
-    <div className="mx-auto max-w-2xl px-6 pb-32 pt-48 text-center">
-      <p className="eyebrow">Anotação perdida</p>
-      <h1 className="mt-4 font-display text-5xl italic">Este post não existe</h1>
-      <Link to="/blog" className="eyebrow mt-10 inline-block hover:text-foreground">
+    <div className="mx-auto max-w-3xl px-6 py-24">
+      <h1 className="font-display text-4xl">Este post não existe</h1>
+      <Link to="/blog" className="mt-6 inline-block text-muted-foreground hover:text-foreground">
         ← Voltar ao blog
       </Link>
     </div>
@@ -51,62 +49,55 @@ function PostPage() {
   const { post, newer, older } = Route.useLoaderData();
 
   return (
-    <article>
-      <header className="relative overflow-hidden pb-12 pt-40">
-        <Fog />
-        <div className="relative mx-auto max-w-3xl px-6">
-          <Link to="/blog" className="eyebrow transition-colors hover:text-foreground">
-            ← Blog
-          </Link>
-          <p className="eyebrow mt-10 text-ember animate-surface">{post.category}</p>
-          <h1 className="animate-emerge mt-4 font-display text-5xl font-light leading-tight text-foreground sm:text-6xl">
-            {post.title}
-          </h1>
-          <p className="mt-6 font-mono text-xs tracking-[0.25em] text-muted-foreground">
-            {formatDate(post.date)}
-          </p>
-        </div>
+    <article className="mx-auto max-w-2xl px-6 pb-24 pt-16">
+      <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground">
+        ← Blog
+      </Link>
+      <header className="mt-8">
+        <p className="text-sm text-muted-foreground">
+          {formatDate(post.date)}
+          {post.category && <> · {post.category}</>}
+        </p>
+        <h1 className="mt-3 font-display text-4xl leading-tight text-foreground sm:text-5xl">
+          {post.title}
+        </h1>
+        {post.excerpt && (
+          <p className="mt-5 text-xl italic leading-relaxed text-muted-foreground">{post.excerpt}</p>
+        )}
       </header>
 
       {post.cover && (
-        <div className="mx-auto max-w-5xl px-6">
-          <img
-            src={post.cover}
-            alt=""
-            className="aspect-[16/9] w-full object-cover opacity-90 grayscale-[40%]"
-          />
-        </div>
+        <img src={post.cover} alt="" loading="lazy" className="mt-10 w-full rounded-sm" />
       )}
 
-      <div className="mx-auto max-w-2xl px-6 py-16">
-        {post.excerpt && (
-          <p className="mb-12 font-display text-2xl italic leading-snug text-fog">{post.excerpt}</p>
-        )}
+      <div className="mt-10">
         <Markdown>{post.content}</Markdown>
       </div>
 
-      <nav className="mx-auto grid max-w-3xl gap-px border-t border-border/70 px-6 pb-32 pt-10 sm:grid-cols-2">
-        <div>
-          {older && (
-            <Link to="/blog/$slug" params={{ slug: older.slug }} className="group block">
-              <p className="eyebrow">← Anterior</p>
-              <p className="mt-2 font-display text-2xl text-muted-foreground transition-colors duration-500 group-hover:text-foreground">
-                {older.title}
-              </p>
-            </Link>
-          )}
-        </div>
-        <div className="sm:text-right">
-          {newer && (
-            <Link to="/blog/$slug" params={{ slug: newer.slug }} className="group block">
-              <p className="eyebrow">Próximo →</p>
-              <p className="mt-2 font-display text-2xl text-muted-foreground transition-colors duration-500 group-hover:text-foreground">
-                {newer.title}
-              </p>
-            </Link>
-          )}
-        </div>
-      </nav>
+      {(older || newer) && (
+        <nav className="mt-16 grid gap-6 border-t border-border pt-8 sm:grid-cols-2">
+          <div>
+            {older && (
+              <Link to="/blog/$slug" params={{ slug: older.slug }} className="group block">
+                <p className="text-sm text-muted-foreground">← Anterior</p>
+                <p className="mt-1 font-display text-xl text-foreground group-hover:underline">
+                  {older.title}
+                </p>
+              </Link>
+            )}
+          </div>
+          <div className="sm:text-right">
+            {newer && (
+              <Link to="/blog/$slug" params={{ slug: newer.slug }} className="group block">
+                <p className="text-sm text-muted-foreground">Próximo →</p>
+                <p className="mt-1 font-display text-xl text-foreground group-hover:underline">
+                  {newer.title}
+                </p>
+              </Link>
+            )}
+          </div>
+        </nav>
+      )}
     </article>
   );
 }

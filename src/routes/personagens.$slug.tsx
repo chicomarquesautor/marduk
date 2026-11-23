@@ -1,5 +1,4 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Fog } from "@/components/site/fog";
 import { Markdown } from "@/components/site/markdown";
 import { getCharacter, getCharacters } from "@/lib/content";
 
@@ -33,10 +32,9 @@ export const Route = createFileRoute("/personagens/$slug")({
   },
   component: CharacterPage,
   notFoundComponent: () => (
-    <div className="mx-auto max-w-2xl px-6 pb-32 pt-48 text-center">
-      <p className="eyebrow">Ninguém aqui</p>
-      <h1 className="mt-4 font-display text-5xl italic">Este personagem não existe</h1>
-      <Link to="/personagens" className="eyebrow mt-10 inline-block hover:text-foreground">
+    <div className="mx-auto max-w-3xl px-6 py-24">
+      <h1 className="font-display text-4xl">Este personagem não existe</h1>
+      <Link to="/personagens" className="mt-6 inline-block text-muted-foreground hover:text-foreground">
         ← Voltar aos personagens
       </Link>
     </div>
@@ -47,65 +45,54 @@ function CharacterPage() {
   const { character, others } = Route.useLoaderData();
 
   return (
-    <article>
-      <section className="relative overflow-hidden pt-32">
-        <Fog />
-        <div className="relative mx-auto grid max-w-6xl gap-12 px-6 md:grid-cols-[5fr_7fr] md:gap-16">
-          <div className="relative md:sticky md:top-28 md:self-start">
-            {character.image ? (
-              <div className="relative aspect-[3/4] overflow-hidden bg-card">
-                <img
-                  src={character.image}
-                  alt={character.name}
-                  className="animate-emerge h-full w-full object-cover"
-                />
-                <div className="bg-portrait-fade absolute inset-0 opacity-60" />
-              </div>
-            ) : (
-              <div className="flex aspect-[3/4] items-center justify-center bg-card font-display text-8xl text-muted-foreground/30">
-                ?
-              </div>
-            )}
-          </div>
-          <div className="pb-24 md:pt-12">
-            <Link to="/personagens" className="eyebrow transition-colors hover:text-foreground">
-              ← Personagens
-            </Link>
-            <p className="eyebrow mt-10 text-ember">{character.role}</p>
-            <h1 className="animate-surface mt-4 font-display text-6xl font-light leading-none text-foreground sm:text-7xl">
-              {character.name}
-            </h1>
-            {character.quote && (
-              <blockquote className="animate-surface mt-10 border-l border-ember pl-6 font-display text-3xl italic leading-snug text-fog [animation-delay:500ms]">
-                “{character.quote}”
-              </blockquote>
-            )}
-            {character.summary && (
-              <p className="mt-10 text-xl leading-relaxed text-foreground/85">{character.summary}</p>
-            )}
-            <div className="mt-10 border-t border-border/70 pt-10">
-              <Markdown>{character.description}</Markdown>
-            </div>
-          </div>
+    <article className="mx-auto max-w-3xl px-6 pb-24 pt-16">
+      <Link to="/personagens" className="text-sm text-muted-foreground hover:text-foreground">
+        ← Personagens
+      </Link>
+      <div className="mt-8 grid gap-8 sm:grid-cols-[14rem_1fr] sm:gap-10">
+        {character.image && (
+          <img
+            src={character.image}
+            alt={character.name}
+            width={720}
+            height={960}
+            className="aspect-[3/4] w-full max-w-[14rem] rounded-sm object-cover"
+          />
+        )}
+        <div>
+          {character.role && <p className="eyebrow">{character.role}</p>}
+          <h1 className="mt-2 font-display text-5xl leading-none text-foreground">{character.name}</h1>
+          {character.quote && (
+            <blockquote className="mt-6 border-l border-border pl-4 text-xl italic leading-snug text-muted-foreground">
+              “{character.quote}”
+            </blockquote>
+          )}
+          {character.summary && (
+            <p className="mt-6 text-lg leading-relaxed text-foreground/90">{character.summary}</p>
+          )}
         </div>
-      </section>
+      </div>
+
+      <div className="mt-12 max-w-2xl">
+        <Markdown>{character.description}</Markdown>
+      </div>
 
       {others.length > 0 && (
-        <section className="mx-auto max-w-6xl border-t border-border/70 px-6 py-20">
-          <p className="eyebrow mb-8">Outros personagens</p>
-          <div className="flex flex-wrap gap-x-10 gap-y-4">
+        <nav className="mt-16 border-t border-border pt-8">
+          <p className="text-sm text-muted-foreground">Outros personagens</p>
+          <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
             {others.map((c) => (
               <Link
                 key={c.slug}
                 to="/personagens/$slug"
                 params={{ slug: c.slug }}
-                className="font-display text-3xl text-muted-foreground transition-all duration-700 hover:text-foreground hover:text-glow"
+                className="font-display text-xl text-foreground hover:underline"
               >
                 {c.name}
               </Link>
             ))}
           </div>
-        </section>
+        </nav>
       )}
     </article>
   );

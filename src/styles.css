@@ -9,14 +9,14 @@
 
 /*
  * Design system — "Marduk: Diário dos sonhos"
- * Escuro e onírico: preto profundo, névoa fria, textos que surgem e somem.
+ * Escuro, simples e leve: fundo preto, texto claro, sem efeitos.
  * Single dark theme (no toggle). All colors oklch.
  */
 
 @theme inline {
   --font-display: "EB Garamond", "Times New Roman", serif;
   --font-serif: "Spectral", Georgia, serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-mono: ui-monospace, monospace;
   --font-sans: "Spectral", Georgia, serif;
 
   --radius-sm: calc(var(--radius) - 2px);
@@ -93,11 +93,6 @@
   --google-border: #8e918f;
   --google-text: #e3e3e3;
 
-  --gradient-veil: linear-gradient(90deg, var(--background) 0%, oklch(0.12 0.008 255 / 85%) 35%, oklch(0.12 0.008 255 / 10%) 75%, transparent 100%);
-  --gradient-fade-up: linear-gradient(0deg, var(--background) 0%, oklch(0.12 0.008 255 / 0%) 100%);
-  --gradient-portrait: linear-gradient(0deg, var(--abyss) 0%, oklch(0.09 0.006 255 / 60%) 30%, transparent 65%);
-  --shadow-glow: 0 0 60px -10px oklch(0.78 0.02 240 / 25%);
-  --text-glow: 0 0 24px oklch(0.86 0.018 235 / 35%);
 
   --chart-1: oklch(0.78 0.02 240);
   --chart-2: oklch(0.6 0.03 240);
@@ -133,81 +128,10 @@
   }
 }
 
-/* ---------- Dream effects ---------- */
-
-@keyframes emerge {
-  0% { opacity: 0; filter: blur(14px); letter-spacing: 0.5em; }
-  100% { opacity: 1; filter: blur(0); }
-}
-@keyframes surface {
-  0% { opacity: 0; filter: blur(8px); transform: translateY(12px); }
-  100% { opacity: 1; filter: blur(0); transform: translateY(0); }
-}
-
-@utility fog-layer {
-  position: absolute;
-  inset: -20%;
-  pointer-events: none;
-  background:
-    radial-gradient(40% 35% at 20% 60%, oklch(0.78 0.02 240 / 10%), transparent 70%),
-    radial-gradient(35% 30% at 75% 40%, oklch(0.78 0.02 240 / 8%), transparent 70%),
-    radial-gradient(50% 40% at 50% 90%, oklch(0.78 0.02 240 / 9%), transparent 70%);
-  filter: blur(30px);
-}
-@utility fog-layer-alt {
-  position: absolute;
-  inset: -20%;
-  pointer-events: none;
-  background:
-    radial-gradient(30% 25% at 60% 70%, oklch(0.78 0.02 240 / 9%), transparent 70%),
-    radial-gradient(45% 30% at 30% 30%, oklch(0.78 0.02 240 / 6%), transparent 70%);
-  filter: blur(40px);
-}
-@utility grain {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 60;
-  /* Normal blending (not overlay) so the noise also dithers near-black gradients and hides banding */
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-@utility vignette {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 59;
-  background: radial-gradient(ellipse at center, transparent 55%, oklch(0.06 0.005 255 / 70%) 100%);
-}
-@utility bg-veil {
-  background: var(--gradient-veil);
-}
-@utility bg-fade-up {
-  background: var(--gradient-fade-up);
-}
-@utility bg-portrait-fade {
-  background: var(--gradient-portrait);
-}
-@utility shadow-glow {
-  box-shadow: var(--shadow-glow);
-}
-@utility text-glow {
-  text-shadow: var(--text-glow);
-}
-@utility animate-emerge {
-  animation: emerge 2.4s cubic-bezier(0.2, 0.6, 0.2, 1) both;
-}
-@utility animate-surface {
-  animation: surface 1.4s cubic-bezier(0.2, 0.6, 0.2, 1) both;
-}
-/* Text that fades away at its edge, as if dissolving */
-@utility text-dissolve {
-  mask-image: linear-gradient(90deg, black 55%, transparent 100%);
-}
 @utility eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.32em;
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-muted-foreground);
 }
@@ -261,6 +185,3 @@
   & img { margin: 2em 0; border-radius: var(--radius); }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-emerge, .animate-surface { animation-duration: 0.01s; }
-}
